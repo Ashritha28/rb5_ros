@@ -1,0 +1,12 @@
+The solution are only the two files (src/hw1_solution.py and src/mpi_twist_control_node.py). 
+
+mpi_twist_control_node.py
+	receive a desired twist and calculate the desired angular velocity for each wheel.
+
+hw1_solution.py
+	given a waypoints list, it uses a loop to walk through all way points. In each loop, it sets the current way point as
+	the target position and use PID controller to calculate the desired twist for the robot to approach current way point.
+
+To run by following commands in order
+roslaunch rb5_control mbot_bringup.launch
+roslaunch rb5_control hw1_sol.launch
