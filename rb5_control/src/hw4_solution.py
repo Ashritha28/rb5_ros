@@ -157,8 +157,10 @@ if __name__ == "__main__":
 
     # init current state
     current_state = np.array([0.0, 0.0, 0.0])
-    found_state, estimated_state = getCurrentPos(listener)
-    print("Found state indicator: ", found_state)
+    count = 0
+    while count < 100:
+        found_state, estimated_state = getCurrentPos(listener)
+        print("Found state indicator: ", found_state)
 
     # in this loop we will go through each way point.
     # once error between the current state and the current way point is small enough,
