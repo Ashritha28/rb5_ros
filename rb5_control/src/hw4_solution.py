@@ -89,12 +89,13 @@ def getCurrentPos(l):
 
     for i in range(0, 9):
         camera_name = "camera_" + str(i)
-        print(camera_name)
         if l.frameExists(camera_name):
             try:
+                print("Trying camera",camera_name)
                 now = rospy.Time()
                 # wait for the transform ready from the map to the camera for 1 second.
                 #l.waitForTransform("map", camera_name, now, rospy.Duration(1.0))
+                print("Waiting for transform")
                 l.waitForTransform(camera_name, "marker_" + str(i), now, rospy.Duration(1))
                 # extract the transform camera pose in the map coordinate.
                 (trans, rot) = l.lookupTransform(camera_name, "marker_"+str(i) , now)
