@@ -73,6 +73,7 @@ void publishTransforms(vector<apriltag_pose_t> poses, vector<int> ids, std_msgs:
 
     tf.setRotation(q);
     string marker_name = "marker_" + to_string(ids[i]);
+    string camera_name= "camera_" + to_string(ids[i]);
     br.sendTransform(tf::StampedTransform(tf, ros::Time::now(), "camera", marker_name));
     ROS_INFO("Transformation published for marker.");
     
