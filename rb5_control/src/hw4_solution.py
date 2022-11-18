@@ -94,9 +94,9 @@ def getCurrentPos(l):
                 now = rospy.Time()
                 # wait for the transform ready from the map to the camera for 1 second.
                 #l.waitForTransform("map", camera_name, now, rospy.Duration(1.0))
-                l.waitForTransform(camera_name, "marker_" + str(i), now, rospy.Duration(1))
+                l.waitForTransform("marker_" + str(i), camera_name, now, rospy.Duration(1))
                 # extract the transform camera pose in the map coordinate.
-                (trans, rot) = l.lookupTransform(camera_name, "marker_"+str(i) , now)
+                (trans, rot) = l.lookupTransform("marker_"+str(i) , camera_name, now)
                 # convert the rotate matrix to theta angle in 2d
                 matrix = quaternion_matrix(rot)
                 print("Rotation matrix cTa in control node: \n", matrix)
@@ -161,6 +161,7 @@ if __name__ == "__main__":
     while count < 100:
         found_state, estimated_state = getCurrentPos(listener)
         print("Found state indicator: ", found_state)
+        count += 1
 
     # in this loop we will go through each way point.
     # once error between the current state and the current way point is small enough,
