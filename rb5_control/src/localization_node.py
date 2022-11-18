@@ -44,9 +44,10 @@ def tag_callback(msg):
         #print("Size of rotation matrix:", r.shape)
         #print("Size of position matrix:",position.shape)
         cTa = np.append(np.append(r, position,axis=1), [[0,0,0,1]], axis=0)
-        #print("cTa: \n",cTa)
+        print("Rotation matrix cTa in localization node: \n",r)
+        print("Translation cTa in localization node: \n", position)
         rTa = np.matmul(rTc, cTa)
-        print("AprilTag in robot coordinates rTa: \n",rTa)
+        #print("AprilTag in robot coordinates rTa: \n",rTa)
         aTr = np.linalg.inv(rTa)
         wTa = pose_ma[apriltag_id]
         wTr = np.matmul(wTa,aTr)
