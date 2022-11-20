@@ -14,6 +14,17 @@ from tf.transformations import quaternion_matrix
 The class of the pid controller.
 """
 
+rTc = np.asarray([[0, 0, 1, 0.05], [-1, 0, 0, 0.015], [0,-1,0, 0.15], [0,0,0,1]])
+pose_ma = {8: np.asarray([[0, 0, 1, 2.05],[-1, 0, 0, 0.015], [0, -1, 0, 0.15], [0,0,0,1]]),
+5: np.asarray([[0, 0, 1, 2.05],[-1, 0, 0, 0.015], [0, -1, 0, 0.15], [0,0,0,1]]),
+0: np.asarray([[0, 0, 1, 2.05],[-1, 0, 0, 0.015], [0, -1, 0, 0.15], [0,0,0,1]]),
+1: np.asarray([[0, 0, 1, 2.05],[-1, 0, 0, 0.015], [0, -1, 0, 0.15], [0,0,0,1]]),
+2: np.asarray([[0, 0, 1, 2.05],[-1, 0, 0, 0.015], [0, -1, 0, 0.15], [0,0,0,1]]),
+3: np.asarray([[0, 0, 1, 2.05], [-1, 0, 0, 0.015], [0, -1, 0, 0.15], [0, 0, 0, 1]]),
+4: np.asarray([[0, 0, 1, 2.05], [-1, 0, 0, 0.015], [0, -1, 0, 0.15], [0, 0, 0, 1]]),
+6: np.asarray([[0, 0, 1, 2.05],[-1, 0, 0, 0.015], [0, -1, 0, 0.15], [0,0,0,1]]),
+7: np.asarray([[0, 0, 1, 2.05],[-1, 0, 0, 0.015], [0, -1, 0, 0.15], [0,0,0,1]]),
+9: np.asarray([[0, 0, 1, 2.05],[-1, 0, 0, 0.015], [0, -1, 0, 0.15], [0,0,0,1]])}
 
 class PIDcontroller:
     def __init__(self, Kp, Ki, Kd):
@@ -79,6 +90,24 @@ class PIDcontroller:
         return result
 
 
+def rotationMatrixToEulerAngles(R):
+    assert (isRotationMatrix(R))
+
+    sy = math.sqrt(R[0, 0] * R[0, 0] + R[1, 0] * R[1, 0])
+
+    singular = sy < 1e-6
+
+    if not singular:
+        x = math.atan2(R[2, 1], R[2, 2])
+        y = math.atan2(-R[2, 0], sy)
+        z = math.atan2(R[1, 0], R[0, 0])
+    else:
+        x = math.atan2(-R[1, 2], R[1, 1])
+        y = math.atan2(-R[2, 0], sy)
+        z = 0
+    # print(np.array([x, y, z]))
+    return np.array([x, y, z])
+
 def getCurrentPos(l):
     """
     Given the tf listener, we consider the camera's z-axis is the header of the car
@@ -100,14 +129,27 @@ def getCurrentPos(l):
                 # extract the transform camera pose in the map coordinate.
                 (trans, rot) = l.lookupTransform(camera_name, "marker_"+str(i) , now)
                 # convert the rotate matrix to theta angle in 2d
-                matrix = quaternion_matrix(rot)
+                matrix = quaternion_matrix(rot)[:3,:3]
+                # print("Rotation matrix cTa in control node: \n", matrix)
+                # print("Translation cTa in control node: \n", trans)
+                position = np.array([[trans.x], [trans.y], [trans.z]])
+                cTa = np.append(np.append(matrix, position, axis=1), [[0, 0, 0, 1]], axis=0)
                 print("Rotation matrix cTa in control node: \n", matrix)
-                print("Translation cTa in control node: \n", trans)
-                angle = math.atan2(matrix[1][2], matrix[0][2])
+                print("Translation cTa in control node: \n", position)
+                rTa = np.matmul(rTc, cTa)
+                aTr = np.linalg.inv(rTa)
+                wTa = pose_ma[i]
+                wTr = np.matmul(wTa, aTr)
+                # angle = math.atan2(matrix[1][2], matrix[0][2])
                 # this is not required, I just used this for debug in RVIZ
-                br.sendTransform((trans[0], trans[1], 0), tf.transformations.quaternion_from_euler(0, 0, angle),
-                                 rospy.Time.now(), "base_link", "map")
-                result = np.array([trans[0], trans[1], angle])
+                # br.sendTransform((trans[0], trans[1], 0), tf.transformations.quaternion_from_euler(0, 0, angle),
+                #                  rospy.Time.now(), "base_link", "map")
+                print("Robot in world coordinates wTr in control node: \n", wTr)
+                transwTr = wTr[:3, 3]
+                rotwTr = wTr[:3, :3]
+                eulerangles = rotationMatrixToEulerAngles(rot)
+                yaw = eulerangles[2]
+                result = np.array([trans[0], trans[1], yaw])
                 foundSolution = True
                 break
             except (
