@@ -132,7 +132,7 @@ def getCurrentPos(l):
                 matrix = quaternion_matrix(rot)[:3,:3]
                 # print("Rotation matrix cTa in control node: \n", matrix)
                 # print("Translation cTa in control node: \n", trans)
-                position = np.array([[trans.x], [trans.y], [trans.z]])
+                position = np.array([[trans[0]], [trans[1]], [trans[2]]])
                 cTa = np.append(np.append(matrix, position, axis=1), [[0, 0, 0, 1]], axis=0)
                 print("Rotation matrix cTa in control node: \n", matrix)
                 print("Translation cTa in control node: \n", position)
@@ -147,9 +147,9 @@ def getCurrentPos(l):
                 print("Robot in world coordinates wTr in control node: \n", wTr)
                 transwTr = wTr[:3, 3]
                 rotwTr = wTr[:3, :3]
-                eulerangles = rotationMatrixToEulerAngles(rot)
+                eulerangles = rotationMatrixToEulerAngles(rotwTr)
                 yaw = eulerangles[2]
-                result = np.array([trans[0], trans[1], yaw])
+                result = np.array([transwTr[0], transwTr[1], yaw])
                 foundSolution = True
                 break
             except (
