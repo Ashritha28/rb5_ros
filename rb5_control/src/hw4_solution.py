@@ -123,7 +123,7 @@ def getCurrentPos(l):
     result = None
     foundSolution = False
 
-    for i in range(0, 9):
+    for i in range(0, 10):
         camera_name = "camera_" + str(i)
         if l.frameExists(camera_name):
             print("Trying camera", camera_name)
