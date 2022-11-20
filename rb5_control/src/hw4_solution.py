@@ -157,6 +157,7 @@ def getCurrentPos(l):
                 eulerangles = rotationMatrixToEulerAngles(rotwTr)
                 yaw = eulerangles[2]
                 result = np.array([transwTr[0], transwTr[1], yaw])
+                print("Final robot state in control node: \n", result)
                 foundSolution = True
                 break
             except (
