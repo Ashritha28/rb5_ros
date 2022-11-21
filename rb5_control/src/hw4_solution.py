@@ -241,7 +241,7 @@ if __name__ == "__main__":
 
     # init pid controller
     # pid = PIDcontroller(0.0185,0.0015,0.09)
-    pid = PIDcontroller(0.03, 0.0015, 0.09)
+    pid = PIDcontroller(0.05, 0.0015, 0.09)
 
     # init current state
     current_state = np.array([0.5, 0.45, 0.0])
@@ -271,7 +271,7 @@ if __name__ == "__main__":
         if found_state:  # if the tag is detected, we can use it to update current state.
             current_state = estimated_state
         while (np.linalg.norm(
-                pid.getError(current_state, wp)) > 0.08):  # check the error between current state and current way point
+                pid.getError(current_state, wp)) > 0.1):  # check the error between current state and current way point
             # calculate the current twist
             update_value = pid.update(current_state)
             # publish the twist
