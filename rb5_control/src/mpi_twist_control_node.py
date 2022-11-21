@@ -14,7 +14,7 @@ class MegaPiControllerNode:
         self.lx = 0.055 # half of the distance between front wheel and back wheel
         self.ly = 0.07 # half of the distance between left wheel and right wheel
         # self.calibration = 100.0 -- working for HW2
-        self.calibration = 150.0
+        self.calibration = 200.0
 
     def twist_callback(self, twist_cmd):
         desired_twist = self.calibration * np.array([[twist_cmd.linear.x], [twist_cmd.linear.y], [twist_cmd.angular.z]])
