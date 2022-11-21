@@ -222,7 +222,7 @@ if __name__ == "__main__":
     pid = PIDcontroller(0.03, 0.0015, 0.09)
 
     # init current state
-    current_state = np.array([0.0, 0.0, 0.0])
+    current_state = np.array([0.5, 0.45, 0.0])
     # count = 0
     # while count < 300:
     #     found_state, estimated_state = getCurrentPos(listener)
