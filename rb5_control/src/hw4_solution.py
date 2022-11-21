@@ -212,7 +212,7 @@ if __name__ == "__main__":
     #  [1.55, 1.5, 0.0],
     #  [1.53, 1.53, 0.0]])
 
-    waypoint = np.array([[0.76, 0.65, 0.0],
+    waypoint = np.array([[0.61, 0.52, 0.0],
  [0.9, 0.71, 0.0],
  # [1.1, 0.66, 0.0],
  [1.3, 0.65, 0.0],
@@ -241,10 +241,10 @@ if __name__ == "__main__":
 
     # init pid controller
     # pid = PIDcontroller(0.0185,0.0015,0.09)
-    pid = PIDcontroller(0.04, 0.0015, 0.09)
+    pid = PIDcontroller(0.185, 0.0015, 0.09)
 
     # init current state
-    current_state = np.array([0.0, 0.0, 0.0])
+    current_state = np.array([0.61, 0.52, 0.0])
     # count = 0
     # while count < 300:
     #     found_state, estimated_state = getCurrentPos(listener)
