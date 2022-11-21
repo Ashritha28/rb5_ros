@@ -271,7 +271,7 @@ if __name__ == "__main__":
         if found_state:  # if the tag is detected, we can use it to update current state.
             current_state = estimated_state
         while (np.linalg.norm(
-                pid.getError(current_state, wp)) > 0.05):  # check the error between current state and current way point
+                pid.getError(current_state, wp)) > 0.15):  # check the error between current state and current way point
             # calculate the current twist
             update_value = pid.update(current_state)
             # publish the twist
