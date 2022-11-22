@@ -188,6 +188,7 @@ def getCurrentPos(l, current_state, pid):
                     error = {}
                     minError = 10000000.0
                     wTr_trans = np.array([current_state[0], current_state[1], 0])
+                    print("Shape wTr_trans ", wTr_trans.shape)
                     wTr_rot = eulerAnglesToRotationMatrix([0, 0, current_state[2]])
                     wTr = np.append(np.append(wTr_rot , wTr_trans, axis=1), [[0, 0, 0, 1]], axis=0)
                     for pose in pose_ma[i]:
@@ -213,7 +214,6 @@ def getCurrentPos(l, current_state, pid):
                 #                  rospy.Time.now(), "base_link", "map")
                 print("Robot in world coordinates wTr in control node: \n", wTr)
                 transwTr = wTr[:3, 3]
-                print("Shape trans ", transwTr.shape)
                 rotwTr = wTr[:3, :3]
                 eulerangles = rotationMatrixToEulerAngles(rotwTr)
                 yaw = eulerangles[2]
