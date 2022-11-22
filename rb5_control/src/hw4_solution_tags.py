@@ -335,7 +335,7 @@ if __name__ == "__main__":
 
     count = 0
     while count < 500:
-        found_state, estimated_state = getCurrentPos(listener, current_state)
+        found_state, estimated_state = getCurrentPos(listener, current_state, pid)
         print("Found state indicator: ", found_state)
         count += 1
 
