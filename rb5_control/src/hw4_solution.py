@@ -146,9 +146,11 @@ def getCurrentPos(l):
                 # wait for the transform ready from the map to the camera for 1 second.
                 #l.waitForTransform("map", camera_name, now, rospy.Duration(1.0))
                 print("Waiting for transform")
+                print("ID - ", i)
                 l.waitForTransform(camera_name, "marker_" + str(i), now, rospy.Duration(1))
                 # extract the transform camera pose in the map coordinate.
                 (trans, rot) = l.lookupTransform(camera_name, "marker_"+str(i) , now)
+                print(l.lookupTransform(camera_name, "marker_"+str(i) , now))
                 # convert the rotate matrix to theta angle in 2d
                 matrix = quaternion_matrix(rot)[:3,:3]
                 # print("Rotation matrix cTa in control node: \n", matrix)
@@ -287,44 +289,44 @@ if __name__ == "__main__":
 
     # init current state
     current_state = np.array([0.5, 0.45, 0.0])
-    # count = 0
-    # while count < 300:
-    #     found_state, estimated_state = getCurrentPos(listener)
-    #     print("Found state indicator: ", found_state)
-    #     count += 1
+    count = 0
+    while count < 300:
+        found_state, estimated_state = getCurrentPos(listener)
+        print("Found state indicator: ", found_state)
+        count += 1
 
     # In this loop we will go through each way point.
     # once error between the current state and the current way point is small enough,
     # the current way point will be updated with a new point.
-    for wp in waypoint:
-        print("move to way point", wp)
-        # set wp as the target point
-        pid.setTarget(wp)
+    # for wp in waypoint:
+    #     print("move to way point", wp)
+    #     # set wp as the target point
+    #     pid.setTarget(wp)
 
-        # calculate the current twist
-        update_value = pid.update(current_state)
-        # publish the twist
-        pub_twist.publish(genTwistMsg(coord(update_value, current_state)))
-        # print(coord(update_value, current_state))
-        time.sleep(0.05)
-        # update the current state
-        current_state += update_value
-        found_state, estimated_state = getCurrentPos(listener)
-        if found_state:  # if the tag is detected, we can use it to update current state.
-            current_state = estimated_state
-        while (np.linalg.norm(
-                pid.getError(current_state, wp)) > 0.08):  # check the error between current state and current way point
-            # calculate the current twist
-            update_value = pid.update(current_state)
-            # publish the twist
-            pub_twist.publish(genTwistMsg(coord(update_value, current_state)))
-            # print(coord(update_value, current_state))
-            time.sleep(0.05)
-            # update the current state
-            current_state += update_value
-            found_state, estimated_state = getCurrentPos(listener)
-            if found_state:
-                current_state = estimated_state
-    # stop the car and exit
-    pub_twist.publish(genTwistMsg(np.array([0.0, 0.0, 0.0])))
+    #     # calculate the current twist
+    #     update_value = pid.update(current_state)
+    #     # publish the twist
+    #     pub_twist.publish(genTwistMsg(coord(update_value, current_state)))
+    #     # print(coord(update_value, current_state))
+    #     time.sleep(0.05)
+    #     # update the current state
+    #     current_state += update_value
+    #     found_state, estimated_state = getCurrentPos(listener)
+    #     if found_state:  # if the tag is detected, we can use it to update current state.
+    #         current_state = estimated_state
+    #     while (np.linalg.norm(
+    #             pid.getError(current_state, wp)) > 0.08):  # check the error between current state and current way point
+    #         # calculate the current twist
+    #         update_value = pid.update(current_state)
+    #         # publish the twist
+    #         pub_twist.publish(genTwistMsg(coord(update_value, current_state)))
+    #         # print(coord(update_value, current_state))
+    #         time.sleep(0.05)
+    #         # update the current state
+    #         current_state += update_value
+    #         found_state, estimated_state = getCurrentPos(listener)
+    #         if found_state:
+    #             current_state = estimated_state
+    # # stop the car and exit
+    # pub_twist.publish(genTwistMsg(np.array([0.0, 0.0, 0.0])))
 
