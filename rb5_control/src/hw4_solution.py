@@ -136,8 +136,8 @@ def getCurrentPos(l):
     result = None
     foundSolution = False
 
-    # for i in range(1,3):
-    for i in range(0, 10):
+    for i in range(1,3):
+    # for i in range(0, 10):
         camera_name = "camera_" + str(i)
         if l.frameExists(camera_name):
             print("Trying camera", camera_name)
@@ -289,44 +289,44 @@ if __name__ == "__main__":
 
     # init current state
     current_state = np.array([0.5, 0.45, 0.0])
-    count = 0
-    while count < 300:
-        found_state, estimated_state = getCurrentPos(listener)
-        print("Found state indicator: ", found_state)
-        count += 1
+    # count = 0
+    # while count < 300:
+    #     found_state, estimated_state = getCurrentPos(listener)
+    #     print("Found state indicator: ", found_state)
+    #     count += 1
 
     # In this loop we will go through each way point.
     # once error between the current state and the current way point is small enough,
     # the current way point will be updated with a new point.
-    # for wp in waypoint:
-    #     print("move to way point", wp)
-    #     # set wp as the target point
-    #     pid.setTarget(wp)
+    for wp in waypoint:
+        print("move to way point", wp)
+        # set wp as the target point
+        pid.setTarget(wp)
 
-    #     # calculate the current twist
-    #     update_value = pid.update(current_state)
-    #     # publish the twist
-    #     pub_twist.publish(genTwistMsg(coord(update_value, current_state)))
-    #     # print(coord(update_value, current_state))
-    #     time.sleep(0.05)
-    #     # update the current state
-    #     current_state += update_value
-    #     found_state, estimated_state = getCurrentPos(listener)
-    #     if found_state:  # if the tag is detected, we can use it to update current state.
-    #         current_state = estimated_state
-    #     while (np.linalg.norm(
-    #             pid.getError(current_state, wp)) > 0.08):  # check the error between current state and current way point
-    #         # calculate the current twist
-    #         update_value = pid.update(current_state)
-    #         # publish the twist
-    #         pub_twist.publish(genTwistMsg(coord(update_value, current_state)))
-    #         # print(coord(update_value, current_state))
-    #         time.sleep(0.05)
-    #         # update the current state
-    #         current_state += update_value
-    #         found_state, estimated_state = getCurrentPos(listener)
-    #         if found_state:
-    #             current_state = estimated_state
-    # # stop the car and exit
-    # pub_twist.publish(genTwistMsg(np.array([0.0, 0.0, 0.0])))
+        # calculate the current twist
+        update_value = pid.update(current_state)
+        # publish the twist
+        pub_twist.publish(genTwistMsg(coord(update_value, current_state)))
+        # print(coord(update_value, current_state))
+        time.sleep(0.05)
+        # update the current state
+        current_state += update_value
+        found_state, estimated_state = getCurrentPos(listener)
+        if found_state:  # if the tag is detected, we can use it to update current state.
+            current_state = estimated_state
+        while (np.linalg.norm(
+                pid.getError(current_state, wp)) > 0.09):  # check the error between current state and current way point
+            # calculate the current twist
+            update_value = pid.update(current_state)
+            # publish the twist
+            pub_twist.publish(genTwistMsg(coord(update_value, current_state)))
+            # print(coord(update_value, current_state))
+            time.sleep(0.05)
+            # update the current state
+            current_state += update_value
+            found_state, estimated_state = getCurrentPos(listener)
+            if found_state:
+                current_state = estimated_state
+    # stop the car and exit
+    pub_twist.publish(genTwistMsg(np.array([0.0, 0.0, 0.0])))
 
