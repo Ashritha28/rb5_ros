@@ -213,7 +213,7 @@ if __name__ == "__main__":
 
     listener = tf.TransformListener()
 
-    Voronoi
+    # Voronoi
     waypoint = np.array([[0.5, 0.45, 0.0],
      [0.7, 0.4, 0.0],
      [0.9, 0.4, 0.0],
