@@ -285,7 +285,7 @@ if __name__ == "__main__":
     # pid = PIDcontroller(0.0185,0.0015,0.09)
     # pid = PIDcontroller(0.0185, 0.0015, 0.09)
     # pid = PIDcontroller(0.08, 0.0015, 0.09) -- Working for Voronoi
-    pid = PIDcontroller(0.04, 0.0015, 0.09)
+    pid = PIDcontroller(0.08, 0.0015, 0.09)
 
     # init current state
     current_state = np.array([0.5, 0.45, 0.0])
