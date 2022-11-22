@@ -213,6 +213,7 @@ def getCurrentPos(l, current_state, pid):
                 #                  rospy.Time.now(), "base_link", "map")
                 print("Robot in world coordinates wTr in control node: \n", wTr)
                 transwTr = wTr[:3, 3]
+                print("Shape trans ", transwTr.shape)
                 rotwTr = wTr[:3, :3]
                 eulerangles = rotationMatrixToEulerAngles(rotwTr)
                 yaw = eulerangles[2]
