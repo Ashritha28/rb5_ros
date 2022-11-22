@@ -195,12 +195,14 @@ def getCurrentPos(l, current_state, pid):
                         # rot_april = pose[:3, :3]
                         # _,_,ang = rotationMatrixToEulerAngles(rot_april)
                         # april_tag_loc = [trans_april[0], trans_april[1], ang]
+                        print("Pose - ", pose)       
                         currentError = pid.getError(wTa[:2, 3], pose[:2, 3])
+                        print("Current Error - ", error)
                         if currentError < minError:
                             minError = currentError
                         error[currentError] = pose
-                    print(error)
-                    wTa = error[minError]           
+                    wTa = error[minError]  
+                    print("wTa - ", wTa) 
                 else:
                     wTa = pose_ma[i]
                 wTr = np.matmul(wTa, aTr)
