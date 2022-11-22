@@ -244,7 +244,7 @@ if __name__ == "__main__":
     # init pid controller
     # pid = PIDcontroller(0.0185,0.0015,0.09)
     # pid = PIDcontroller(0.0185, 0.0015, 0.09)
-    pid = PIDcontroller(0.07, 0.0015, 0.09)
+    pid = PIDcontroller(0.08, 0.0015, 0.09)
 
     # init current state
     current_state = np.array([0.5, 0.45, 0.0])
