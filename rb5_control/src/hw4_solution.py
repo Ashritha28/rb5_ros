@@ -32,7 +32,7 @@ pose_ma = {
     # 3: np.asarray([[-1, 0, 0, 0.5],[0, 0, -1, 0.0], [0, -1,  0, 0.15], [0,0,0,1]]),
 2: np.asarray([[-1, 0, 0, 1.5],[0, 0, -1, 0.0], [0, -1, 0, 0.15], [0,0,0,1]]),
 1: np.asarray([[0, 0, 1, 2.0],[-1, 0, 0, 0.5], [0, -1, 0, 0.15], [0,0,0,1]]),
-# 8: np.asarray([[0, 0, 1, 2.0],[-1, 0, 0, 1.5], [0, -1, 0, 0.15], [0,0,0,1]]),
+8: np.asarray([[0, 0, 1, 2.0],[-1, 0, 0, 1.5], [0, -1, 0, 0.15], [0,0,0,1]]),
 # 4: np.asarray([[1, 0, 0, 1.5],[0, 0, 1, 2.0], [0, -1, 0, 0.15], [0,0,0,1]]),
 # 1: np.asarray([[1, 0, 0, 0.5], [0, 0, 1, 2.0], [0, -1, 0, 0.15], [0, 0, 0, 1]]),
 # 0: np.asarray([[1, 0, 0, 1], [0, 0, 1, 0.83], [0, -1, 0, 0.15], [0, 0, 0, 1]]),
@@ -136,8 +136,8 @@ def getCurrentPos(l):
     result = None
     foundSolution = False
 
-    for i in range(1,3):
-    # for i in range(0, 10):
+    # for i in range(1,3):
+    for i in range(0, 10):
         camera_name = "camera_" + str(i)
         if l.frameExists(camera_name):
             print("Trying camera", camera_name)
@@ -150,7 +150,7 @@ def getCurrentPos(l):
                 l.waitForTransform(camera_name, "marker_" + str(i), now, rospy.Duration(1))
                 # extract the transform camera pose in the map coordinate.
                 (trans, rot) = l.lookupTransform(camera_name, "marker_"+str(i) , now)
-                print(l.lookupTransform(camera_name, "marker_"+str(i) , now))
+                # print(l.lookupTransform(camera_name, "marker_"+str(i) , now))
                 # convert the rotate matrix to theta angle in 2d
                 matrix = quaternion_matrix(rot)[:3,:3]
                 # print("Rotation matrix cTa in control node: \n", matrix)
@@ -180,7 +180,7 @@ def getCurrentPos(l):
             tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException, tf2_ros.TransformException):
                 print("meet error")
     listener.clear()
-    return foundSolution, result
+    return foundSolution, result, i
 
 
 def genTwistMsg(desired_twist):
@@ -285,7 +285,7 @@ if __name__ == "__main__":
     # pid = PIDcontroller(0.0185,0.0015,0.09)
     # pid = PIDcontroller(0.0185, 0.0015, 0.09)
     # pid = PIDcontroller(0.08, 0.0015, 0.09) -- Working for Voronoi
-    pid = PIDcontroller(0.038, 0.0015, 0.09)
+    pid = PIDcontroller(0.04, 0.0015, 0.09)
 
     # init current state
     current_state = np.array([0.5, 0.45, 0.0])
@@ -298,7 +298,7 @@ if __name__ == "__main__":
     # In this loop we will go through each way point.
     # once error between the current state and the current way point is small enough,
     # the current way point will be updated with a new point.
-    for wp in waypoint:
+    for idx, wp  in enumerate(waypoint):
         print("move to way point", wp)
         # set wp as the target point
         pid.setTarget(wp)
@@ -311,8 +311,8 @@ if __name__ == "__main__":
         time.sleep(0.05)
         # update the current state
         current_state += update_value
-        found_state, estimated_state = getCurrentPos(listener)
-        if found_state:  # if the tag is detected, we can use it to update current state.
+        found_state, estimated_state, i = getCurrentPos(listener)
+        if found_state and i!=8:  # if the tag is detected, we can use it to update current state.
             current_state = estimated_state
         while (np.linalg.norm(
                 pid.getError(current_state, wp)) > 0.09):  # check the error between current state and current way point
@@ -324,9 +324,12 @@ if __name__ == "__main__":
             time.sleep(0.05)
             # update the current state
             current_state += update_value
-            found_state, estimated_state = getCurrentPos(listener)
+            found_state, estimated_state, i = getCurrentPos(listener)
             if found_state:
-                current_state = estimated_state
+                if i!=8:
+                    current_state = estimated_state
+                if i==8 and idx>len(waypoint)/2:
+                    current_state = estimated_state
     # stop the car and exit
     pub_twist.publish(genTwistMsg(np.array([0.0, 0.0, 0.0])))
 
