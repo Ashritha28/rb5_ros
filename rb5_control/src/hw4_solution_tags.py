@@ -149,6 +149,7 @@ def eulerAnglesToRotationMatrix(theta) :
     #print(R_y)
     #print(R_z)
     R = np.matrix.round(np.dot(R_x, np.dot( R_y, R_z )), 2)
+    print(R.shape)
  
     return R
 
