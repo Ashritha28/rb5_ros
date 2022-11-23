@@ -338,7 +338,7 @@ if __name__ == "__main__":
     current_state = np.array([0.4, 0.4, 0.0])
 
     count = 0
-    while count < 500:
+    while count < 1000:
         found_state, estimated_state = getCurrentPos(listener, current_state, pid)
         print("Found state indicator: ", found_state)
         count += 1
