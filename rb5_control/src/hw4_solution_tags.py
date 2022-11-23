@@ -182,7 +182,7 @@ def getCurrentPos(l, current_state, pid):
                 print("Rotation matrix cTa in control node: \n", matrix)
                 print("Translation cTa in control node: \n", position)
                 rTa = np.matmul(rTc, cTa)
-                # aTr = np.linalg.inv(rTa)
+                aTr = np.linalg.inv(rTa)
                 if len(pose_ma[i]) > 1:
                     # error = []
                     error = {}
