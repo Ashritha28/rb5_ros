@@ -72,7 +72,7 @@ class PIDcontroller:
         return the different between two states
         """
         result = targetState - currentState
-        result[2] = (result[2] + np.pi) % (2 * np.pi) - np.pi
+        # result[2] = (result[2] + np.pi) % (2 * np.pi) - np.pi
         return result
 
     def setMaximumUpdate(self, mv):
