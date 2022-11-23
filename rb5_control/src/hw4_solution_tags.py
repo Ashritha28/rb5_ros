@@ -200,7 +200,7 @@ def getCurrentPos(l, current_state, pid):
                         # april_tag_loc = [trans_april[0], trans_april[1], ang]
                         print("Pose - ", pose)       
                         currentError = pid.getError(wTa[:2, 3], pose[:2, 3])
-                        print("Current Error - ", error)
+                        print("Current Error - ", currentError)
                         if currentError < minError:
                             minError = currentError
                         error[currentError] = pose
