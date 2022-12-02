@@ -246,7 +246,7 @@ if __name__ == "__main__":
     # pid = PIDcontroller(0.0185,0.0015,0.09)
     # pid = PIDcontroller(0.0185, 0.0015, 0.09)
     # pid = PIDcontroller(0.08, 0.0015, 0.09) -- Working for Voronoi
-    pid = PIDcontroller(0.03, 0.0015, 0.09)
+    pid = PIDcontroller(0.0185, 0.0015, 0.09)
 
     # init current state
     current_state = np.array([0.35, 0.35, 0.0])
@@ -278,7 +278,7 @@ if __name__ == "__main__":
             current_state = estimated_state
         traj_points.append([current_state[0], current_state[1]])
         while (np.linalg.norm(
-                pid.getError(current_state, wp)) > 0.09):  # check the error between current state and current way point
+                pid.getError(current_state, wp)) > 0.1):  # check the error between current state and current way point
             # calculate the current twist
             update_value = pid.update(current_state)
             # publish the twist
