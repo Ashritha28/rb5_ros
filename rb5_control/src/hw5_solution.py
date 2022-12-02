@@ -19,7 +19,7 @@ rTc = np.asarray([[0, 0, 1, 0.05], [-1, 0, 0, 0.015], [0,-1,0, 0.15], [0,0,0,1]]
 # For A*
 pose_ma = {
 # 3: np.asarray([[-1, 0, 0, 0.5],[0, 0, -1, 0.0], [0, -1,  0, 0.15], [0,0,0,1]]),
-4: np.asarray([[-1, 0, 0, 0.35],[0, 0, -1, 0.0], [0, -1, 0, 0.15], [0,0,0,1]]),
+4: np.asarray([[-1, 0, 0, 0.35],[0, 0, -1, -0.10], [0, -1, 0, 0.15], [0,0,0,1]]),
 1: np.asarray([[0, 0, 1, 2.0],[-1, 0, 0, 0.5], [0, -1, 0, 0.15], [0,0,0,1]]),
 8: np.asarray([[0, 0, 1, 2.0],[-1, 0, 0, 1.5], [0, -1, 0, 0.15], [0,0,0,1]]),
 # 4: np.asarray([[1, 0, 0, 1.5],[0, 0, 1, 2.0], [0, -1, 0, 0.15], [0,0,0,1]]),
@@ -246,7 +246,7 @@ if __name__ == "__main__":
     # pid = PIDcontroller(0.0185,0.0015,0.09)
     # pid = PIDcontroller(0.0185, 0.0015, 0.09)
     # pid = PIDcontroller(0.08, 0.0015, 0.09) -- Working for Voronoi
-    pid = PIDcontroller(0.04, 0.0015, 0.09)
+    pid = PIDcontroller(0.03, 0.0015, 0.09)
 
     # init current state
     current_state = np.array([0.35, 0.35, 0.0])
@@ -276,7 +276,7 @@ if __name__ == "__main__":
         found_state, estimated_state, i = getCurrentPos(listener)
         if found_state:  # if the tag is detected, we can use it to update current state.
             current_state = estimated_state
-        traj_points.append([self.current_state[0], self.current_state[1]])
+        traj_points.append([current_state[0], current_state[1]])
         while (np.linalg.norm(
                 pid.getError(current_state, wp)) > 0.09):  # check the error between current state and current way point
             # calculate the current twist
@@ -288,7 +288,7 @@ if __name__ == "__main__":
             # update the current state
             current_state += update_value
             found_state, estimated_state, i = getCurrentPos(listener)
-            traj_points.append([self.current_state[0], self.current_state[1]])
+            traj_points.append([current_state[0], current_state[1]])
             if found_state:
                 # if i!=8:
                 current_state = estimated_state
