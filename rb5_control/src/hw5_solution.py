@@ -288,13 +288,12 @@ if __name__ == "__main__":
             # update the current state
             current_state += update_value
             found_state, estimated_state, i = getCurrentPos(listener)
-            traj_points.append([current_state[0], current_state[1]])
             if found_state:
                 # if i!=8:
                 current_state = estimated_state
                 # if i==8 and idx>len(waypoint)/2:
                 #     current_state = estimated_state
-            traj_points.append([self.current_state[0], self.current_state[1]])
+            traj_points.append([current_state[0], current_state[1]])
     # stop the car and exit
     with open(r'hw5_traj.txt', 'w') as fp:
         fp.write(','.join(str(v) for v in traj_points))
