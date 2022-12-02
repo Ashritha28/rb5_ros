@@ -295,7 +295,7 @@ if __name__ == "__main__":
                 #     current_state = estimated_state
             traj_points.append([current_state[0], current_state[1]])
     # stop the car and exit
-    with open(r'hw5_traj.txt', 'w') as fp:
+    with open(r'hw5_traj_2.txt', 'w') as fp:
         fp.write(','.join(str(v) for v in traj_points))
     pub_twist.publish(genTwistMsg(np.array([0.0, 0.0, 0.0])))
 
